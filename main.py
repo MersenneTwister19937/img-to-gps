@@ -54,21 +54,30 @@ def user_input():
     global open_googlemaps
 
     try:
-        if (getattr(sys, "frozen", False)):
+        using_exe = getattr(sys, "frozen", False)
+
+        if (using_exe):
             base = os.path.dirname(sys.executable)
         else:
             base = os.path.dirname(os.path.abspath(__file__))
 
-        if (platform.system().startswith("Windows")):
-            img_folder = Path(os.path.join(base + "\\dist\\", "img"))
+        if (using_exe):
+            if (platform.system().startswith("Windows")):
+                img_folder = Path(os.path.join(base, "img"))
+            else:
+                img_folder = Path(os.path.join(base, "img"))
+            files = [file.name for file in img_folder.iterdir() if file.is_file() and file.name != ".DS_Store"]
         else:
-            img_folder = Path(os.path.join(base + "/dist/", "img"))
-        files = [file.name for file in img_folder.iterdir() if file.is_file() and file.name != ".DS_Store"]
+            if (platform.system().startswith("Windows")):
+                img_folder = Path(os.path.join(base + "\\dist\\", "img"))
+            else:
+                img_folder = Path(os.path.join(base + "/dist/", "img"))
+            files = [file.name for file in img_folder.iterdir() if file.is_file() and file.name != ".DS_Store"]
 
         if (not files):
             cprint("You have no files in the images folder!", "red")
             cprint("To add some, go to dist > img and add a file. \n", "red")
-            exit(0)
+            sys.exit()
 
         for number, name in enumerate(files, start=1):
             print(f"{number}) {name}")

@@ -1,3 +1,3 @@
 ([('main',
-   '/Users/ryanfontana/Documents/Projects/Coding/img-to-gps/dist/main',
+   '/Users/ryanfontana/Documents/GitHub/img-to-gps/dist/main',
    'EXECUTABLE')],)
