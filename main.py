@@ -9,31 +9,33 @@ if not platform.system().startswith("Windows"):
         from PIL import Image
         from PIL.ExifTags import TAGS
     except ImportError or ModuleNotFoundError:
-        system("python3 -m pip install pillow -q -q -q")
+        system("python3 -m pip install pillow --break-system-packages")
     try:
         from termcolor import colored, cprint
-    except ImportError or ModuleNotFoundError:
-        system("python3 -m pip install termcolor -q -q -q")
+    except ImportError or ModuleNotFoundError or NameError:
+        system("python3 -m pip install termcolor --break-system-packages")
+        from termcolor import colored, cprint
     try:
         import pyfiglet
         import pyfiglet.fonts
     except ImportError:
-        system("python3 -m pip install pyfiglet -q -q -q")
+        system("python3 -m pip install pyfiglet --break-system-packages")
 else:
     try:
         from PIL import Image
         from PIL.ExifTags import TAGS
     except ImportError or ModuleNotFoundError:
-        system("python -m pip install pillow -q -q -q")
+        system("python -m pip install pillow")
     try:
         from termcolor import colored, cprint
-    except ImportError or ModuleNotFoundError:
-        system("python -m pip install termcolor -q -q -q")
+    except ImportError or ModuleNotFoundError or NameError:
+        system("python -m pip install termcolor")
+        from termcolor import colored, cprint
     try:
         import pyfiglet
         import pyfiglet.fonts
     except ImportError:
-        system("python -m pip install pyfiglet -q -q -q")
+        system("python -m pip install pyfiglet")
 
 system("cls" if name == "nt" else "clear")
 cprint(pyfiglet.figlet_format("IMG TO GPS"), "green")
@@ -97,7 +99,7 @@ elif ("GPSLatitude" in exif and "GPSLongitude" in exif):
     cprint(f"Longitude: {lon}", "light_green")
 
     if (open_googlemaps):
-        webbrowser.open("https://maps.google.com/?q=lat,lon")
+        webbrowser.open(f"https://maps.google.com/?q={lat},{lon}")
 else:
     cprint("Couldn't find Latitude and Longitude, here are some other things found: \n", "yellow")
     if ("ImageDescription" in exif):
