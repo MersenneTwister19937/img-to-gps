@@ -1,3 +1,5 @@
+<img width="384" height="85" alt="Screenshot 2026-08-25 at 16 52 26" src="https://github.com/user-attachments/assets/9056994c-03e8-4a7a-8d26-3d43a5724537" />
+
 # IMG to GPS
 Took a cool picture and forgot where it was? Find the exact location through metadata with this simple python script!
 
