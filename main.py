@@ -3,6 +3,7 @@ import sys
 from os import system, name
 import platform
 import webbrowser
+from pathlib import Path
 
 if not platform.system().startswith("Windows"):
     try:
@@ -53,17 +54,38 @@ def user_input():
     global open_googlemaps
 
     try:
-        path_input = input("Enter the image's path (e.g 'selfie.jpg'): ")
-        googlemaps_confirm = input("Open google maps with location if fetched? (Y/n): ")
-        if (googlemaps_confirm.lower() == "y"):
-            open_googlemaps = True
-
         if (getattr(sys, "frozen", False)):
             base = os.path.dirname(sys.executable)
         else:
             base = os.path.dirname(os.path.abspath(__file__))
-        
-        path = os.path.join(base + "/dist/", "img", path_input) #TODO: make this more flexible
+
+        if (platform.system().startswith("Windows")):
+            img_folder = Path(os.path.join(base + "\\dist\\", "img"))
+        else:
+            img_folder = Path(os.path.join(base + "/dist/", "img"))
+        files = [file.name for file in img_folder.iterdir() if file.is_file() and file.name != ".DS_Store"]
+
+        if (not files):
+            cprint("You have no files in the images folder!", "red")
+            cprint("To add some, go to dist > img and add a file. \n", "red")
+            exit(0)
+
+        for number, name in enumerate(files, start=1):
+            print(f"{number}) {name}")
+        print("\n")
+
+        path_input = int(input(f"Select a file (1-{len(files)}): "))
+        if (1 <= path_input <= len(files)):
+            selected = path_input - 1
+        else:
+            cprint(f"Number must be from 1-{len(files)}!", "red")
+            user_input()
+
+        googlemaps_confirm = input("Open google maps with location if fetched? (Y/n): ")
+        if (googlemaps_confirm.lower() == "y"):
+            open_googlemaps = True
+
+        path = os.path.join(base + "/dist/", "img", files[selected]) #TODO: make this more flexible
 
         img = Image.open(path)
     except FileNotFoundError as e:
