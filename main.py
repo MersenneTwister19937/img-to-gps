@@ -61,7 +61,7 @@ def user_input():
         else:
             base = os.path.dirname(os.path.abspath(__file__))
         
-        path = os.path.join(base, "img", path_input)
+        path = os.path.join(base + "/dist/", "img", path_input) #TODO: make this more flexible
 
         img = Image.open(path)
     except FileNotFoundError as e:
@@ -106,6 +106,9 @@ else:
         print("Date & Time: " + exif["DateTime"])
     if ("Software" in exif):
         print("Software Output: \n" + exif["Software"])
+
+    if (all(item not in exif for item in ["ImageDescription", "DateTime", "Software"])):
+        cprint("Couldn't find Description, DateTime or Software from image! \n", "red")
 
     if (input("Get all metadata? (Y/n): ").lower() == "y"):
         for id in exif:
